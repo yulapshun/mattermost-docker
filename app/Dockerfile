@@ -22,6 +22,9 @@ RUN mkdir -p /mattermost/data \
     && cp /mattermost/config/config.json /config.json.save \
     && rm -rf /mattermost/config/config.json
 
+# Replace custom web client
+COPY dist/ /mattermost/client
+
 # Configure entrypoint and command
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

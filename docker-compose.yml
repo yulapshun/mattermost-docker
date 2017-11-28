@@ -41,8 +41,7 @@ services:
   web:
     build: web
     ports:
-      - "80:80"
-      - "443:443"
+      - "17329:80"
     restart: unless-stopped
     volumes:
       # This directory must have cert files
