@@ -27,7 +27,6 @@ services:
       - ./volumes/app/mattermost/logs:/mattermost/logs:rw
       - /etc/localtime:/etc/localtime:ro
     environment:
-      # set same as db credentials and dbname
       - MM_USERNAME=mmuser
       - MM_PASSWORD=mmuser_password
       - MM_DBNAME=mattermost
@@ -35,8 +34,6 @@ services:
       - DB_PORT_NUMBER=3306
       - MM_SQLSETTINGS_DRIVERNAME=mysql
       - MM_SQLSETTINGS_DATASOURCE=mmuser:mmuser_password@tcp(db:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
-      # in case your config is not in default location
-      #- MM_CONFIG=/mattermost/config/config.json
 
   web:
     build: web
@@ -44,9 +41,18 @@ services:
       - "17329:80"
     restart: unless-stopped
     volumes:
-      # This directory must have cert files
       - ./volumes/web/cert:/cert:ro
       - /etc/localtime:/etc/localtime:ro
-    # Uncomment for SSL
-    # environment:
-    #  - MATTERMOST_ENABLE_SSL=true
+  bot:
+    image: yulapshun/mattermost-cugcbot:latest
+    restart: unless-stopped
+    volumes:
+      - ./mattermost-cugcbot/uwsgi.ini:/root/uwsgi.ini
+      - ./mattermost-cugcbot/config.ini:/root/config.ini
+      - ./mattermost-cugcbot/cugc:/root/cugc/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20M"
+        max-file: "10"
+    command: uwsgi --ini uwsgi.ini

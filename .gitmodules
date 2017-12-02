@@ -1,0 +1,3 @@
+[submodule "mattermost-cugcbot"]
+	path = mattermost-cugcbot
+	url = git@github.com:yulapshun/mattermost-cugcbot.git
