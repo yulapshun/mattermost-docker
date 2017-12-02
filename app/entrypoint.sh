@@ -12,6 +12,8 @@ MM_USERNAME=${MM_USERNAME:-mmuser}
 MM_PASSWORD=${MM_PASSWORD:-mmuser_password}
 MM_DBNAME=${MM_DBNAME:-mattermost}
 MM_CONFIG=${MM_CONFIG:-/mattermost/config/config.json}
+MM_SQLSETTINGS_DRIVERNAME=${MM_SQLSETTINGS_DRIVERNAME:-postgres}
+MM_SQLSETTINGS_DATASOURCE=${MM_SQLSETTINGS_DATASOURCE:-$MM_USERNAME:$MM_PASSWORD@tcp($DB_HOST:$DB_PORT_NUMBER)/$MM_DBNAME?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s}
 
 if [ "${1:0:1}" = '-' ]; then
     set -- platform "$@"
@@ -48,7 +50,8 @@ if [ "$1" = 'platform' ]; then
     jq '.EmailSettings.InviteSalt = "'$(generate_salt)'"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.EmailSettings.PasswordResetSalt = "'$(generate_salt)'"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.RateLimitSettings.Enable = true' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
-    jq '.SqlSettings.DriverName = "postgres"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
+    jq ".SqlSettings.DriverName = $MM_SQLSETTINS_DEIVERNAME" $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
+    jq ".SqlSettings.DataSource = $MM_SQLSETTINGS_DATASOURCE" $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
     jq '.SqlSettings.AtRestEncryptKey = "'$(generate_salt)'"' $MM_CONFIG > $MM_CONFIG.tmp && mv $MM_CONFIG.tmp $MM_CONFIG
   else
     echo "Using existing config file" $MM_CONFIG
