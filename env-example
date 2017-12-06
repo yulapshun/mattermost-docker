@@ -1,0 +1,23 @@
+# db
+MYSQL_ROOT_PASSWORD=example
+MYSQL_USER=mmuser
+MYSQL_PASSWORD=mmuser_password
+MYSQL_DATABASE=mattermost
+
+# app
+MM_USERNAME=mmuser
+MM_PASSWORD=mmuser_password
+MM_DBNAME=mattermost
+DB_HOST=db
+DB_PORT_NUMBER=3306
+MM_SQLSETTINGS_DRIVERNAME=mysql
+MM_SQLSETTINGS_DATASOURCE=mmuser:mmuser_password@tcp(db:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+
+#web
+WEB_PORT=17329
+
+# bot
+BANNER_MATTERMOST_TOKEN=[replace me]
+TASK_MATTERMOST_TOKEN=[replace me]
+VOTING_MATTERMOST_TOKEN=[replace me]
+UWSGI_HTTP_SOCKET=:5000
